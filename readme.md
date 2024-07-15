@@ -20,11 +20,12 @@ The Jupyter notebook `evaluation_covariance_mean_svm` presents the methodology d
 ## Citation
 Please cite our work if it helps your research:
 
-    @article{Olmos2023Gait,
-      title={Gait Patterns Coded as Riemannian Mean Covariances to Support Parkinson’s Disease Diagnosis},
-      author={Olmos, Juan and Manzanera, Antoine and Martínez, Fabio},
-      journal={Journal Title},
-      year={2023},
+    @inproceedings{olmos2022gait,
+    title={Gait patterns coded as Riemannian mean covariances to support Parkinson’s disease diagnosis},
+    author={Olmos, Juan and Galvis, Juan and Mart{\'\i}nez, Fabio},
+    booktitle={Ibero-American Conference on Artificial Intelligence},
+    pages={3--14},
+    year={2022}
     }
 
 ## Project Structure
