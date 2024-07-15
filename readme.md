@@ -1,11 +1,3 @@
-# Source code of the paper "Gait patterns coded as Riemannian mean covariances to support Parkinson’s disease diagnosis"
-
-In the folder ``data`` are the two datasets used in the paper. For example ``covs_DN20`` corresponds to frame covariance matrices calculated from DenseNet features. The nomenclature CG_XX_YY.npy correspond in this case for a control subject, patient XX, and video YY. 
-
-In the notebook ``evaluation_covariance_mean_svm`` is presented the result of copmute the covariance mean of videos as described in the paper, that is, computing the Algorithm1 (Presented in the paper) to calculate the covariance mean of frame covariances. Then, the covariance means of each video is projected to the tangent space on the Identity matrix, and the upper triangular part of those matrices is taken as feature vector for each sample. From these vectors is computed the SVM. 
-
-
-
 This repository contains the source code and datasets associated with the research paper entitled:
 
 **"Gait Patterns Coded as Riemannian Mean Covariances to Support Parkinson’s Disease Diagnosis"**
