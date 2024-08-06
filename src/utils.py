@@ -309,3 +309,17 @@ def evaluate_metrics_repeatedly(dataset_vectors, dataset_labels, repetitions = 1
     })
     
     display(metrics_summary)
+    
+def reduce_spd_dataset(dataset_covs, n_components):
+    dataset_covs = np.array(dataset_covs)
+    new_dataset = np.zeros((dataset_covs.shape[0], dataset_covs.shape[1], n_components, n_components))
+    for i in range(dataset_covs.shape[0]):
+        for j in range(dataset_covs.shape[1]):
+            covariance_to_reduce = dataset_covs[i, j]
+            eigenvalues, eigenvectors = np.linalg.eigh(covariance_to_reduce) # Calculate eigenvalues and eigenvectors            
+            idx = eigenvalues.argsort()[::-1] # Sort eigenvalues in descending order
+            eigenvectors = eigenvectors[:,idx][:,:n_components] # Sort eigenvectors according to eigenvalues and get the first n_components
+            reduced_covariance = eigenvectors.T @ np.diag(eigenvalues) @ eigenvectors            
+            new_dataset[i, j] = reduced_covariance            
+    return new_dataset    
+
