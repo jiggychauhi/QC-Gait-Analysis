@@ -165,19 +165,18 @@ def calculate_covariances_per_subject_and_frame(
           Format: {subject_id-video_key: mean_covariance_matrix}
     """
     
-    new_subjects_dict = {}
+    ret = []
     
     
-    for subject_id in ids: # Iterate over each subject in the provided IDs list        
-        for video_key, video_cov_matrices in subject_covariances[subject_id].items():   # Iterate over each video within the subject's data            
-            # Store the result in the new dictionary, using a combined key of subject ID and video key
-            mat = regularize_covariance_matrices(video_cov_matrices)
-            if f'{subject_id}' in new_subjects_dict:
-                new_subjects_dict[f'{subject_id}'].append(mat)
-            else:
-                new_subjects_dict[f'{subject_id}'] = [mat]
+    for subject_id in ids: # Iterate over each subject in the provided IDs list 
+        ret.append([])       
+        for video_cov_matrices in subject_covariances[subject_id].values():   # Iterate over each video within the subject's data            
+            # video_cov_mean = generalized_eigenvalue_covariance_mean(
+            #     covariance_matrices=video_cov_matrices,
+            # ) 
+            ret[-1].append(video_cov_matrices)
     
-    return list(new_subjects_dict.values())
+    return ret
 
 
 def calculate_mean_covariances_per_subject(
