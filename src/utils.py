@@ -455,6 +455,75 @@ def evaluate_subject_based_metrics(dataset_dict, repetitions=1, estimator=None):
     
     display(metrics_summary)
 
+def check_subject_video_count(dataset_dict):
+    """
+    Checks the number of videos associated with each subject in the dataset.
+    Prints out any subjects that do not have exactly 8 videos and returns the number of errors found.
+
+    Args:
+        dataset_dict (dict): A dictionary where keys represent video identifiers in the format 'subjectID-videoID'.
+
+    Returns:
+        int: The number of subjects that do not have exactly 8 videos.
+    """
+    # Extract unique subject IDs
+    subject_ids = list(set([key.split('-')[0] for key in dataset_dict.keys()]))
+    
+    error_count = 0
+    
+    # Loop through each subject and check the number of associated videos
+    for subject in subject_ids:
+        count_videos = len([key for key in dataset_dict.keys() if key.split('-')[0] == subject])
+        
+        if count_videos != 8:
+            print(f"Subject {subject} has {count_videos} videos")
+            error_count += 1
+    if error_count == 0:
+        print("All subjects have exactly 8 videos.")
+    return error_count
+
+def create_X_y_groups_arrays(dataset_dict):
+    """
+    Creates three arrays: X, y, and groups from the dataset dictionary.
+    
+    - X contains the values from the dataset dictionary.
+    - y contains 1 if the key contains 'PG', and 0 if the key contains 'CG'.
+    - groups contains the subject IDs extracted from the keys.
+    
+    Args:
+        dataset_dict (dict): A dictionary where keys are strings in the format 'subjectID-videoID',
+                             and values are the data points.
+
+    Returns:
+        tuple: A tuple of numpy arrays (X, y, groups)
+            - X: Array of dataset values.
+            - y: Array of labels, 1 for 'PG', 0 for 'CG'.
+            - groups: Array of subject IDs.
+    """
+    X = []
+    y = []
+    ids = []
+    groups = []
+    
+    # Iterate over each key, value pair in the dataset dictionary
+    for key, value in dataset_dict.items():        
+        X.append(value)        
+        # Determine the label for y 
+        if 'PG' in key:
+            y.append(1)
+        elif 'CG' in key:
+            y.append(0)        
+        # Extract the subject ID 
+        ids.append(key)
+        subject_id = key.split('-')[0]
+        groups.append(subject_id)
+        
+    X = np.array(X)
+    y = np.array(y)
+    ids = np.array(ids)
+    groups = np.array(groups)
+    
+    return X, y, ids, groups
 
 def reduce_spd(covariance_to_reduce, n_components):
     eigenvalues, eigenvectors = np.linalg.eigh(covariance_to_reduce) # Calculate eigenvalues and eigenvectors            
