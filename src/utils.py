@@ -8,7 +8,7 @@ from tqdm import tqdm
 from sklearn.model_selection import LeaveOneOut
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-
+from pyriemann.utils import mean_covariance
 from src.covariance_means import generalized_eigenvalue_covariance_mean
 
 def regularize_covariance_matrices(covariance_matrices):
@@ -139,30 +139,49 @@ def calculate_covariance_means(dataset, tolerance=1e-9, max_iterations=50, initi
 
     return covariance_means
 
+def batch_covs(dataset, batch_size, metric):
+    """
+    Group frames inside a video into batch.
+    Compute the mean of this group.
+
+    Parameters:
+    dataset (list): A list containing the mean covariance matrices by subject x video x frame                               
+    batch_size (int): A list of subject IDs for which the covariance means should be calculated.    
+    metric (string): metric to use to compute the mean.
+
+    Returns:
+    numpy_array: a list of covariance matrices. 
+    groups: Contain the subject number for each covariance matrix.
+    """
+    n_subject = len(dataset)
+    n_video = len(dataset[0])
+    covs = []
+    groups = []
+    for subject in range(n_subject):
+        for video in range(n_video):
+            n_frames = len(dataset[subject][video])
+            for start_batch in range(0, n_frames, batch_size):
+                end_betch = min(start_batch + batch_size, n_frames)
+                frames = dataset[subject][video][start_batch:end_betch]
+                m = mean_covariance(frames, metric=metric)
+                covs.append(m)
+                groups.append(subject)
+    return np.array(covs), groups
 
 def calculate_covariances_per_subject_and_frame(
         subject_covariances,
         ids, 
     ):
     """
-    Calculates the mean covariance matrix for each video associated with a given set of subjects.
-
+    Calculates the mean covariance by subject x video x frame.
     Parameters:
     subject_covariances (dict): A dictionary where keys are subject IDs, and values are dictionaries containing video keys 
                                 and their corresponding covariance matrices.
                                 Format: {subject_id: {video_key: covariance_matrices}}                                
     ids (list): A list of subject IDs for which the covariance means should be calculated.    
-    tolerance (float): The tolerance for the stopping criterion in the mean calculation. Default is 1e-9.    
-    max_iterations (int): The maximum number of iterations for the mean calculation. Default is 50.    
-    initialization (str or np.ndarray): The initial value for the mean covariance matrix. 
-                                        Options are 'mean', 'identity', 'first', or a specific matrix. 
-                                        If None, the mean of the covariance matrices is used. Default is None.                                        
-    norm_type (str): The type of norm used for the stopping criterion. Options are 'frobenius' or None. Default is 'frobenius'.
 
     Returns:
-    dict: A dictionary containing the mean covariance matrices for each video of each subject.
-          The keys are a combination of subject IDs and video keys, separated by a hyphen.
-          Format: {subject_id-video_key: mean_covariance_matrix}
+    list: A list containing the mean covariance matrices by subject x video x frame
     """
     
     ret = []
