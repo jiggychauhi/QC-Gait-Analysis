@@ -8,7 +8,7 @@ from tqdm import tqdm
 from sklearn.model_selection import LeaveOneOut
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-
+from pyriemann.utils import mean_covariance
 from src.covariance_means import generalized_eigenvalue_covariance_mean
 
 def regularize_covariance_matrices(covariance_matrices):
@@ -138,6 +138,65 @@ def calculate_covariance_means(dataset, tolerance=1e-9, max_iterations=50, initi
         covariance_means.append(patient_cov_means)
 
     return covariance_means
+
+def batch_covs(dataset, batch_size, metric):
+    """
+    Group frames inside a video into batch.
+    Compute the mean of this group.
+
+    Parameters:
+    dataset (list): A list containing the mean covariance matrices by subject x video x frame                               
+    batch_size (int): A list of subject IDs for which the covariance means should be calculated.    
+    metric (string): metric to use to compute the mean.
+
+    Returns:
+    numpy_array: a list of covariance matrices. 
+    groups: Contain the subject number for each covariance matrix.
+    """
+    n_subject = len(dataset)
+    n_video = len(dataset[0])
+    covs = []
+    groups = []
+    for subject in range(n_subject):
+        for video in range(n_video):
+            n_frames = len(dataset[subject][video])
+            for start_batch in range(0, n_frames, batch_size):
+                end_betch = min(start_batch + batch_size, n_frames)
+                frames = dataset[subject][video][start_batch:end_betch]
+                m = mean_covariance(frames, metric=metric)
+                covs.append(m)
+                groups.append(subject)
+    return np.array(covs), groups
+
+def calculate_covariances_per_subject_and_frame(
+        subject_covariances,
+        ids, 
+    ):
+    """
+    Calculates the mean covariance by subject x video x frame.
+    Parameters:
+    subject_covariances (dict): A dictionary where keys are subject IDs, and values are dictionaries containing video keys 
+                                and their corresponding covariance matrices.
+                                Format: {subject_id: {video_key: covariance_matrices}}                                
+    ids (list): A list of subject IDs for which the covariance means should be calculated.    
+
+    Returns:
+    list: A list containing the mean covariance matrices by subject x video x frame
+    """
+    
+    ret = []
+    
+    
+    for subject_id in ids: # Iterate over each subject in the provided IDs list 
+        ret.append([])       
+        for video_cov_matrices in subject_covariances[subject_id].values():   # Iterate over each video within the subject's data            
+            # video_cov_mean = generalized_eigenvalue_covariance_mean(
+            #     covariance_matrices=video_cov_matrices,
+            # ) 
+            ret[-1].append(video_cov_matrices)
+    
+    return ret
+
 
 def calculate_mean_covariances_per_subject(
         subject_covariances,
