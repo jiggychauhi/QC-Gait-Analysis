@@ -1,44 +1,49 @@
-This repository contains the source code and datasets associated with the research paper entitled:
+# Comparison of Quantum and RBF Kernels Using Support Vector Machine
 
-**"Parkinson Disease Classification: A Comparison of Quantum and RBF Kernels Using Support Vector Machine"**
+This repository contains the source code and datasets associated with the paper entitled:
 
-## Authors
-- Juan Olmos<sup>1</sup>, Juan Galvis <sup>2</sup>, Fabio Martínez <sup>1*</sup>
+*"Parkinson Disease Classification: A Comparison of Quantum and RBF Kernels Using Support Vector Machine"* <br/>
+
+Gregoire Cattan <sup>1</sup>, Juan Olmos <sup>2,3</sup>, Yash Chauchan <sup>4</sup>, Fabio Martínez <sup>2</sup>
+
+<sup>1 </sup> Data and AI IBM, Poland.
+
+<sup>2 </sup> Biomedical Imaging, Vision and Learning Laboratory ([BIVL$^2$ab](https://bivl2ab.uis.edu.co/)), Universidad Industrial de Santander (UIS), Bucaramanga 680002,Colombia.
+
+<sup>3 </sup> Unité d'Informatique et d'Ingénierie des Systèmes (U2IS), ENSTA Paris, Institut Polytechnique de Paris. <br/>
+
+<sup>4 </sup> School of Physical Sciences, National Institute of Science Education
+and Research, An OCC of Homi Bhabha National Institute, Jatni, Bhubaneswar, 752050, Odisha, India.
+
+<div align="center">
+  <img src="imgs/pipeline.png" width="100%" height="70%"/>
+</div><br/>
 
 
 ## Datasets
-The `data` folder contains two datasets utilized in the research:
-- `covs_DN20`: This dataset consists of frame covariance matrices calculated using DenseNet features.
-- The files named `CG_XX_YY.npy` represent data for a control subject, identified by patient XX and video YY.
+The `data` folder contains the mean covariances datasets utilized in the research.
+
 
 ## Notebook
-The Jupyter notebook `evaluation_covariance_mean_svm` presents the methodology described in the paper. This includes:
-1. Computing the Riemannian mean of the covariance matrices of video frames as outlined by Algorithm 1 in the paper.
-2. Projecting the covariance means onto the tangent space at the identity matrix.
-3. Extracting the upper triangular part of these matrices to serve as feature vectors for SVM classification.
+The Jupyter notebook `notebook_clean` presents the best pipeline (XFeatureMap) of the work described in the **paper**. 
 
 ## Citation
-Please cite our work if it helps your research:
 
-    @inproceedings{olmos2022gait,
-    title={Gait patterns coded as Riemannian mean covariances to support Parkinson’s disease diagnosis},
-    author={Olmos, Juan and Galvis, Juan and Mart{\'\i}nez, Fabio},
-    booktitle={Ibero-American Conference on Artificial Intelligence},
-    pages={3--14},
-    year={2022}
-    }
+...
+<!-- @inproceedings{2025qsvm,
+title={Parkinson Disease Classification: A Comparison of Quantum and RBF Kernels Using Support Vector Machine},
+author={Olmos, Juan and Galvis, Juan and Mart{\'\i}nez, Fabio},
+booktitle={Ibero-American Conference on Artificial Intelligence},
+pages={3--14},
+year={2022}
+} -->
 
 ## Project Structure
-    ├── data
-    │   └── ...                        <- Dataset folders and files.
-    │
-    ├── evaluation_covariance_mean_svm.ipynb
-    |
-    ├── README.md                      <- The top-level README for developers using this project.
-    |
-    └── src                            <- Source code for the implementation.
+    ├── data                           <- Dataset folders and files.
+    ...
+    ├── notebook_clean.ipynb           <- Pipeline (XFeatureMap).
+    ├── README.md                     <- The top-level README for developers using this project.
+    └── src                           <- Utility functions.
 
 ## Contact Information
-- **Juan A. Olmos**: jaolmosr@correo.uis.edu.co
-
 For further information, contributions, or questions, feel free to contact the authors.
