@@ -1,6 +1,6 @@
 This repository contains the source code and datasets associated with the research paper entitled:
 
-**"Gait Patterns Coded as Riemannian Mean Covariances to Support Parkinson’s Disease Diagnosis"**
+**"Parkinson Disease Classification: A Comparison of Quantum and RBF Kernels Using Support Vector Machine"**
 
 ## Authors
 - Juan Olmos<sup>1</sup>, Juan Galvis <sup>2</sup>, Fabio Martínez <sup>1*</sup>
