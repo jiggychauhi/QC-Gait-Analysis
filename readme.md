@@ -41,8 +41,7 @@ year={2022}
 ## Project Structure
     ├── data                           <- Dataset folders and files.
     ...
-    ├── notebook_clean.ipynb           <- Pipeline (XFeatureMap).
-    ├── README.md                     <- The top-level README for developers using this project.
+    ├── notebook_clean.ipynb           <- Pipeline (XFeatureMap).    
     └── src                           <- Utility functions.
 
 ## Contact Information
